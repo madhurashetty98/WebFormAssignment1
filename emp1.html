@@ -1,0 +1,250 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+       <link rel="stylesheet" href="D:\bootstrap\css\bootstrap.css" />
+ <link rel="stylesheet" href="D:\bootstrap\css\bootstrap-responsive.css" />
+ <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+ <link href="D:\HTMLBASIC\empinput.html">
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+</head>
+
+
+        <style>
+.innertab {
+    width: 700px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 20px;	
+    background-color: rgb(248, 240, 232);
+    font-family: "Maiandra GD",Arial, Helvetica, sans-serif;
+    text-align: center;
+  font-size: 12pt;
+  box-shadow: 2px 2px 4px #000000;
+  border-radius: 30px;
+}
+
+
+#deletemodal{
+    height:350px;
+    width:550px;
+  }
+  .modal-content{
+    height:255px;
+    width:500px;
+    margin:23px;
+  }
+  #alk-table td,#alk-table th
+{
+  border:3px solid rgb(221, 209, 209);
+  padding: 8px;
+  text-align: center;
+  font-size: 13pt;
+  color:rgb(32, 34, 34);
+}
+body{
+  background-color: rgb(233, 181, 181);
+}
+ 
+
+    .btn-info {
+  color: #fff;
+  background-color: #69dff1;
+  border-radius: 35px;
+  border: 1px solid rgba(132, 239, 255, 0.75);  
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color:rgb(236, 222, 218);
+}
+
+
+#form{
+            width: 500px;
+            height: 380px;
+            background-color: rgb(248, 240, 232);
+            margin-top: 30px;
+            border: 10px solid black;
+            border-radius: 20px;
+            padding:30px;
+            display:none;
+            margin-left:450px;
+        }
+        input{
+            width:300px;
+        }
+        </style>
+         <script>
+             $(document).ready(function(){
+                 diaplayPage(1);
+             });
+             function diaplayPage(pageNo)
+            {
+                pagePointer=pageNo;
+                URL="https://reqres.in/api/users?page=";
+                $("tbody").children().remove();
+             $.ajax({
+            url: URL+pageNo,
+            type:"GET",
+            dataType:"JSON",
+            beforeSend: function(){}
+        }).done(function(response) {
+            var tablerow="";
+            $.each(response.data, function(u, v){
+                tablerow=tablerow+'<tr><td>' + v.first_name +" " +v.last_name+ '</td><td>' + v.email + '</td><td><img id="img" src="' 
+                + v.avatar + '" width="100px" /></td><td> <button   title="Edit" data-toggle="tooltip" onclick="edit()"><i  class="material-icons" style="color:green">&#xE254;</i></button>  <a class="delete"  title="Delete" data-target="#deletemodal" data-toggle="modal"><i  class="material-icons" style="color:red">&#xE872;</i></a>';
+            });
+            $('#table').append(tablerow);
+        });
+        
+    }
+
+function edit() {                       //To display form whn click on edit      
+                $("#form").show();
+              }
+
+
+
+
+//toggle//
+    jQuery(document).ready(function()
+        {
+    jQuery("#btnm").click(function(){
+      jQuery("#form").show();
+      jQuery(".innertab").hide();
+    });
+  });
+//edit//     
+ $(document).on("click", ".edit", function(){		
+        $(this).parents("tr").find("td:not(:last-child)").each(function(){
+			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+		});		
+		$(this).parents("tr").find(".add, .edit").toggle();
+		$(".add-new").attr("disabled", "disabled");
+    });
+//delete//
+$(document).on("click", ".delete", function()
+            {
+                $(this).parents("tr").remove();
+		        $(".add-new").removeAttr("disabled");
+            });
+
+            var fname=$("#firstname").val();
+       var lname=$("#lastname").val();
+       var mail=$("#email").val();
+
+            $(document).ready(function(){
+     
+
+                $("#submit").click(function(){
+                  $.ajax({
+        url: "https://reqres.in/api/users",
+        type: "POST",
+         data :
+                    {
+                        data: JSON.stringify( { "first-name": $('#firstname').val(),"last-name": $('#lastname').val(), "email": $('#email').val() } )
+                    },
+        success: function(response){
+            console.log(response);
+               }
+                });
+                });
+                });
+
+           
+  </script>
+    </head>
+    <body>
+            <div class="container" id>
+                        <div class="innertab">
+                            <div  >
+                              <div class="row">
+                                <div class="col-sm-9"> <h2>User Lists</h2></div>
+                             
+                                <div class="col-sm-2 col-sm-offset-1"><button  type="button" id="btnm" class="btn btn-info"  style="margin-top: 15px;"><i class="fa fa-plus" ></i>Add New </button> </div>
+                               </div>
+                            <table id="alk-table" class="table table-hover" style="margin-top: 30px;  width:655px; height:300px;" >
+                                    <thead>
+                                        <tr>
+                                     <th scope="col">Name</th>
+                                     <th  scope="col">Email_address</th>
+                                     <th  scope="col">Avatar</th>
+                                     <th scope="col">Actions</th></tr>
+                                    </thead>
+   
+                                    <tbody id="table"></tbody>
+                            </table>
+                            <div class="container">                
+                                    <ul class="pagination" style="padding-right:90px";>
+                                      <li> <a href="#" onclick="diaplayPage(pagePointer-1)" class="glyphicon glyphicon-chevron-left"></a></li>  
+                                         
+                                      <li ><a href="#" class=button1 onclick="diaplayPage(1)">1</a></li>
+                                      <li><a href="#" class=button1 onclick="diaplayPage(2)">2</a></li>
+                                      <li><a href="#" class=button1 onclick="diaplayPage(3)">3</a></li>
+                                      <li><a href="#" class=button1 onclick="diaplayPage(4)">4</a></li>
+                                      <li> <a href="#" onclick="diaplayPage(pagePointer+1)" class="glyphicon glyphicon-chevron-right"></a></li>  
+                                    </ul>
+                                </div>  
+                                <div class="modal" role="document"  id="deletemodal" tabindex="-1" role="dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title">Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <p>Are you sure you want to delete ?</p>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary"   data-dismiss="modal">Delete</button>
+                                        <button type="button" class="btn btn-secondary" >Cancel</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                      
+                      
+                                
+                          
+                    </div>
+                    
+
+                    </div>
+
+                    <form id=form>
+                        <div class="container1">
+                            <h4 > User Details</h4>
+                            <form class="horizontal">
+                
+                            <label for="input">First Name</label>
+                            <input type="text" name="name" id="firstname" placeholder="John">
+                
+                            <label for="input">Last Name</label>
+                            <input type="text" name="name" id="lastname" placeholder="Doe">
+                
+                            <label for="input">Email</label>
+                            <input type="text" name="email" id="email" placeholder="you@domain.com"><br>
+                            <button type="submit" id="submit" value="Submit" class="btn btn-info submit" style="margin-left:150px;">Submit</button>
+                            </div>
+                        </form>
+
+
+               </div>
+
+                </div>
+              </div>
+
+
+                  
+               
+    </body>
+</html>
